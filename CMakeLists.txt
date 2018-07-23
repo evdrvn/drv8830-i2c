@@ -1,0 +1,7 @@
+  cmake_minimum_required(VERSION 2.8)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build Type")
+  add_definitions("-Wall")
+  add_library(drv8830-i2c-static STATIC src/drv8830-i2c.c)
+  add_library(drv8830-i2c-shared SHARED src/drv8830-i2c.c)
+  set_target_properties(drv8830-i2c-static PROPERTIES OUTPUT_NAME "drv8830-i2c")
+  set_target_properties(drv8830-i2c-shared PROPERTIES OUTPUT_NAME "drv8830-i2c")
