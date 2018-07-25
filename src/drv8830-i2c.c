@@ -78,10 +78,6 @@ int drv8830_readbytes(drv8830_conn_t* conn, uint8_t reg, uint8_t *dest, uint8_t 
     return ret;
 }
 
-static int write8(drv8830_conn_t* conn, byte value){
-    return drv8830_writebytes(conn, &value, 1);
-}
-
 static byte read8(drv8830_conn_t* conn, drv8830_reg_t reg){
     byte val = 0;
     drv8830_readbytes(conn, reg, &val, 1);
@@ -107,15 +103,15 @@ int drv8830_open(drv8830_conn_t* conn, const char* i2cdev, uint8_t address, int 
 int drv8830_move(drv8830_conn_t* conn, int8_t target){
     int direction = 0; 
     int voltage = 0; 
-    int control = 0; 
+    uint8_t data[2] = {0};
     
     voltage = abs(target);
     if(voltage >  63) voltage = 63;
     if(target < 0) direction = 2;
     if(target > 0) direction = 1;
-    control = voltage << 2 | direction;
+    data[1] = voltage << 2 | direction;
     
-    return write8(conn, control);
+    return drv8830_writebytes(conn, data, 2);
 }
 
 int drv8830_readfault(drv8830_conn_t* conn){
