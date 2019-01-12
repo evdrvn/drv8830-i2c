@@ -23,7 +23,7 @@ typedef struct
 } drv8830_conn_t;
 
 extern int drv8830_open(drv8830_conn_t* conn, const char* i2cdev, uint8_t address, int timeout_10ms);
-extern int drv8830_move(drv8830_conn_t* conn, int8_t target);
+extern int drv8830_move(drv8830_conn_t* conn, float vol);
 extern int drv8830_readfault(drv8830_conn_t* conn);
 
 #endif

@@ -100,17 +100,21 @@ int drv8830_open(drv8830_conn_t* conn, const char* i2cdev, uint8_t address, int 
     return fd;
 }
 
-int drv8830_move(drv8830_conn_t* conn, int8_t target){
-    int direction = 0; 
-    int voltage = 0; 
+int drv8830_move(drv8830_conn_t* conn, float vol){
+    int func = 0; 
+    int vset = 0; 
     uint8_t data[2] = {0};
-    
-    voltage = abs(target);
-    if(voltage >  63) voltage = 63;
-    if(target < 0) direction = 2;
-    if(target > 0) direction = 1;
-    data[1] = voltage << 2 | direction;
-    
+    static int count = 0; 
+    vset = (int)(fabs(vol) * 8.0F / 1.285F);
+    if(vset >  63) vset = 63;
+    if(vset <  6){ 
+        vset = 0;
+        func = 0;
+    }
+    if(vol < 0) func = 2;
+    if(vol > 0) func = 1;
+    data[1] = vset << 2 | func;
+    count++; 
     return drv8830_writebytes(conn, data, 2);
 }
 
